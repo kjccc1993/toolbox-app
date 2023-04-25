@@ -18,27 +18,49 @@ describe('Files API', () => {
     request = supertest.agent(server)
   })
 
-  it('should return formatted data based on csv files', async () => {
-    //Agrego respuestas controladas para evitar llamadas a la api externa
-    //durante los tests
-    nock(env.toolbox.baseUrl).get(`/files`).reply(200, mockToolboxFilesResponse)
-    mockToolboxFilesResponse.files.forEach((fileName) => {
+  describe('/data', () => {
+    it('should return formatted data based on csv files', async () => {
+      //Agrego respuestas controladas para evitar llamadas a la api externa
+      //durante los tests
       nock(env.toolbox.baseUrl)
-        .get(`/file/${fileName}`)
-        .reply(200, mockToolboxCsvDataReponses[fileName])
+        .get(`/files`)
+        .reply(200, mockToolboxFilesResponse)
+      mockToolboxFilesResponse.files.forEach((fileName) => {
+        nock(env.toolbox.baseUrl)
+          .get(`/file/${fileName}`)
+          .reply(200, mockToolboxCsvDataReponses[fileName])
+      })
+
+      const resp = await request.get('/files/data').expect(200)
+
+      //la informacion obtenida tiene el formato esperado
+      expect(resp.body).to.deep.equal(stubGetFilesResponse)
     })
 
-    const resp = await request.get('/files/data').expect(200)
+    it('should return an error message if no files are available', async () => {
+      nock(env.toolbox.baseUrl).get(`/files`).reply(200, { files: [] })
+      const resp = await request.get('/files/data').expect(404)
 
-    //la informacion obtenida tiene el formato esperado
-    expect(resp.body).to.deep.equal(stubGetFilesResponse)
+      //No hay archivos disponibles, error
+      expect(resp.body.message).to.equal('Could not find available files')
+    })
   })
 
-  it('should return an error message if no files are available', async () => {
-    nock(env.toolbox.baseUrl).get(`/files`).reply(200, { files: [] })
-    const resp = await request.get('/files/data').expect(404)
+  describe('/list', () => {
+    it('should return the a list like the toolbox api', async () => {
+      nock(env.toolbox.baseUrl).get(`/files`).reply(200, mockToolboxFilesResponse)
+      const resp = await request.get('/files/list').expect(200)
 
-    //No hay archivos disponibles, error
-    expect(resp.body.message).to.equal('Could not find available files')
+      //La respuesta es identica a la que devuelve toolbox
+      expect(resp.body).to.deep.equal(mockToolboxFilesResponse)
+    })
+
+    it('should return an error message if no files are available', async () => {
+      nock(env.toolbox.baseUrl).get(`/files`).reply(200, { files: [] })
+      const resp = await request.get('/files/list').expect(404)
+
+      //No hay archivos disponibles, error
+      expect(resp.body.message).to.equal('Could not find available files')
+    })
   })
 })
