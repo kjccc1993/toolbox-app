@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import NavBar from './components/NavBar'
 import Home from './pages/home/Home'
-import styles from './app.module.css'
+import { Container } from 'react-bootstrap'
 
 function App() {
   return (
@@ -9,9 +9,9 @@ function App() {
       <header>
         <NavBar />
       </header>
-      <div className={styles.container}>
+      <Container>
         <Home />
-      </div>
+      </Container>
     </>
   )
 }

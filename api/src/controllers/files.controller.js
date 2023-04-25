@@ -58,7 +58,7 @@ async function getAvailableFiles() {
     return {
       error: {
         statusCode: HttpStatusCode.InternalServerError,
-        message: 'Error trying to get availbale files',
+        message: 'Error trying to get available files',
       },
     }
   }
