@@ -3,11 +3,21 @@ import { errorResponse, HttpStatusCode } from '../utils/error.js'
 
 export async function getFiles(req, res) {
   const { fileName } = req.query
-  const { availableFiles, error } = await getAvailableFiles()
+  let { availableFiles, error } = await getAvailableFiles()
 
   //Algo ocurrió
   if (error) {
     return errorResponse(res, error.statusCode, error.message)
+  }
+
+  if (fileName && !availableFiles.includes(fileName)) {
+    return errorResponse(
+      res,
+      HttpStatusCode.NotFound,
+      `Provided fileName not found: ${fileName}`
+    )
+  } else if (fileName) {
+    availableFiles = availableFiles.filter((f) => f === fileName)
   }
 
   try {
