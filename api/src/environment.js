@@ -1,12 +1,9 @@
-import * as dotenv from 'dotenv'
-
-//dotenv config
-dotenv.config()
-
+//Por lo general estos datos deben venir de variables de ambiente (.env),
+//se deja así porque es requisito para la prueba
 export default {
-  port: process.env.PORT || 3333,
+  port: 3333,
   toolbox: {
-    apiKey: process.env.TOOLBOX_API_KEY,
-    baseUrl: process.env.TOOLBOX_BASE_URL,
+    apiKey: 'aSuperSecretKey',
+    baseUrl: 'https://echo-serv.tbxnet.com/v1/secret',
   },
 }

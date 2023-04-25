@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import env from 'react-dotenv'
+import env from '../environment'
 
 const useAvailableFiles = () => {
   const [availableFiles, setAvailableFiles] = useState([])
   const getAvailableFiles = async () => {
-    const url = `${env.API_URL}/list`
+    const url = `${env.apiUrl}/list`
     const resp = await fetch(url)
     const { files } = await resp.json()
 

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import env from 'react-dotenv'
+import env from '../environment'
 
 export const getFilesRequest = createAsyncThunk(
   'files/data',
   async (fileName, ThunkAPI) => {
-    let url = `${env.API_URL}/data`
+    let url = `${env.apiUrl}/data`
 
     if (fileName && fileName !== 'All') {
       url += `?fileName=${fileName}`
