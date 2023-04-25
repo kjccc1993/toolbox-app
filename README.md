@@ -42,3 +42,12 @@ UI
 ```
 
 Se abrirá una pestaña nueva en el navegador en [http://localhost:3000/](http://localhost:3000/)
+
+## Running Tests
+Se crearon unit tests para el API
+
+```bash
+    cd api
+    npm test
+```
+
